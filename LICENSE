@@ -1,0 +1,21 @@
+
+/* This is derived from fluidballs.c, xscreensaver-5.05 */
+
+/* fluidballs, Copyright (c) 2000 by Peter Birtles <peter@bqdesign.com.au>
+ *
+ * Permission to use, copy, modify, distribute, and sell this software
+ * and its documentation for any purpose is hereby granted without
+ * fee, provided that the above copyright notice appear in all copies
+ * and that both that copyright notice and this permission notice
+ * appear in supporting documentation.  No representations are made
+ * about the suitability of this software for any purpose.  It is
+ * provided "as is" without express or implied warranty.
+ *
+ * Ported to X11 and xscreensaver by jwz, 27-Feb-2002.
+ *
+ * http://astronomy.swin.edu.au/~pbourke/modelling/fluid/
+ *
+ * Some physics improvements by Steven Barker <steve@blckknght.org>
+ */
+
+Android port by Autch <autch@autch.net> with the same terms of use.
