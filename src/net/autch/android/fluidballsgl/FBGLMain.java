@@ -11,13 +11,22 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.Window;
+import android.widget.Toast;
 
 public class FBGLMain extends Activity implements SensorEventListener{
 	private SensorManager	sensorManager;
 	private Sensor			acceleroMeter;
 	private GLSurfaceView	surfaceView;
-	private FluidBallsRenderer renderer; 
+	private FluidBallsRenderer renderer;
+	private final float accel[] = { 0.0f, 0.0f };
+	private float dx = 0.05f, dy = 0.05f;
+	private final float repeat_factor = 0.1f;
+	private static final int MID_INVERT_X_POLAR = 0x1001;
+	private static final int MID_INVERT_Y_POLAR = 0x1002;
 
 	/** Called when the activity is first created. */
 	@Override
@@ -62,5 +71,60 @@ public class FBGLMain extends Activity implements SensorEventListener{
 		sensorManager.unregisterListener(this);
 
 		surfaceView.onPause();
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		float repeat;
+
+		repeat = 1.0f; //repeat_factor * event.getRepeatCount();
+
+		switch(keyCode) {
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+			accel[0] -= dx * repeat;
+			break;
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			accel[0] += dx * repeat;
+			break;
+		case KeyEvent.KEYCODE_DPAD_UP:
+			accel[1] -= dy * repeat;
+			break;
+		case KeyEvent.KEYCODE_DPAD_DOWN:
+			accel[1] += dy * repeat;
+			break;
+		default:
+			return super.onKeyDown(keyCode, event);
+		}
+		renderer.setAccel(accel);
+
+		return true;
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		menu.add(Menu.NONE, MID_INVERT_X_POLAR, Menu.NONE, "Invert X polarity");
+		menu.add(Menu.NONE, MID_INVERT_Y_POLAR, Menu.NONE, "Invert Y polarity");
+		return true;
+	}
+
+	@Override
+	public boolean onMenuItemSelected(int featureId, MenuItem item) {
+		Toast t = null;
+
+		switch(item.getItemId()) {
+		case MID_INVERT_X_POLAR:
+			dx = -dx;
+			t = Toast.makeText(this, "Inverted X polarity", Toast.LENGTH_SHORT);
+			t.show();
+			break;
+		case MID_INVERT_Y_POLAR:
+			dy = -dy;
+			t = Toast.makeText(this, "Inverted Y polarity", Toast.LENGTH_SHORT);
+			t.show();
+			break;
+		}
+
+		return super.onMenuItemSelected(featureId, item);
 	}
 }
