@@ -87,6 +87,6 @@ public class FluidBallsRenderer implements Renderer {
 
 	public void setAccel(float[] values)
 	{
-		fluidballs_setaccel((float)(-values[0] / 8.0), (float)(values[1] / 8.0));
+		fluidballs_setaccel(-values[0] / 8.0f, values[1] / 8.0f);
 	}
 }

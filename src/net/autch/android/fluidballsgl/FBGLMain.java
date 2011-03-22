@@ -101,6 +101,24 @@ public class FBGLMain extends Activity implements SensorEventListener{
 	}
 
 	@Override
+	public boolean onKeyUp(int keyCode, KeyEvent event) {
+		switch(keyCode) {
+		case KeyEvent.KEYCODE_DPAD_LEFT:
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			accel[0] = 0.0f;
+			break;
+		case KeyEvent.KEYCODE_DPAD_UP:
+		case KeyEvent.KEYCODE_DPAD_DOWN:
+			accel[1] = 0.0f;
+			break;
+		default:
+			return super.onKeyUp(keyCode, event);
+		}
+		renderer.setAccel(accel);
+		return true;
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
 		menu.add(Menu.NONE, MID_INVERT_X_POLAR, Menu.NONE, "Invert X polarity");
