@@ -27,7 +27,9 @@ public class FBGLMain extends Activity implements SensorEventListener{
 	private final float repeat_factor = 0.1f;
 	private static final int MID_INVERT_X_POLAR = 0x1001;
 	private static final int MID_INVERT_Y_POLAR = 0x1002;
-
+	private static final int MID_SWAP_XY = 0x1003;
+	private boolean swap_xy = false;
+	
 	/** Called when the activity is first created. */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -51,6 +53,8 @@ public class FBGLMain extends Activity implements SensorEventListener{
 
 	public void onSensorChanged(SensorEvent event) {
 		if(event.sensor == acceleroMeter) {
+			event.values[0] *= dx > 0 ? 1 : -1;
+			event.values[1] *= dy > 0 ? 1 : -1;
 			renderer.setAccel(event.values);
 		}
 	}
@@ -121,6 +125,7 @@ public class FBGLMain extends Activity implements SensorEventListener{
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		super.onCreateOptionsMenu(menu);
+		menu.add(Menu.NONE, MID_SWAP_XY, Menu.NONE, "Swap X and Y");
 		menu.add(Menu.NONE, MID_INVERT_X_POLAR, Menu.NONE, "Invert X polarity");
 		menu.add(Menu.NONE, MID_INVERT_Y_POLAR, Menu.NONE, "Invert Y polarity");
 		return true;
@@ -131,6 +136,12 @@ public class FBGLMain extends Activity implements SensorEventListener{
 		Toast t = null;
 
 		switch(item.getItemId()) {
+		case MID_SWAP_XY:
+			swap_xy = !swap_xy;
+			renderer.setSwap_xy(swap_xy);
+			t = Toast.makeText(this, "Swapped X and Y", Toast.LENGTH_SHORT);
+			t.show();
+			break;
 		case MID_INVERT_X_POLAR:
 			dx = -dx;
 			t = Toast.makeText(this, "Inverted X polarity", Toast.LENGTH_SHORT);

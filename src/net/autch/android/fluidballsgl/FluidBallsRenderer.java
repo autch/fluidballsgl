@@ -11,9 +11,10 @@ import android.opengl.GLU;
 import android.opengl.GLSurfaceView.Renderer;
 
 public class FluidBallsRenderer implements Renderer {
-	private static final int BALLS = 500;
+	private static final int BALLS = 100;
 	private final FloatBuffer circleBuffer;
 	private final float[] buffer;
+	private boolean swap_xy;
 
 	public native void fluidballs_init(int count, int width, int height);
 	public native void fluidballs_exit();
@@ -82,11 +83,24 @@ public class FluidBallsRenderer implements Renderer {
 	// called from fluidballs_drawballs()
 	private void setBallCoord(float xc, float yc, float r)
 	{
-		circleBuffer.put(xc); circleBuffer.put(yc);
+		if(!swap_xy) {
+			circleBuffer.put(xc); circleBuffer.put(yc);
+		} else {
+			circleBuffer.put(yc); circleBuffer.put(xc);
+		}
 	}
 
 	public void setAccel(float[] values)
 	{
-		fluidballs_setaccel(-values[0] / 8.0f, values[1] / 8.0f);
+		if(!swap_xy) {
+			fluidballs_setaccel(-values[0] / 8.0f, values[1] / 8.0f);
+		} else {
+			fluidballs_setaccel(-values[1] / 8.0f, values[0] / 8.0f);
+		}
+	}
+	
+	public void setSwap_xy(boolean swap_xy)
+	{
+		this.swap_xy = swap_xy;
 	}
 }
